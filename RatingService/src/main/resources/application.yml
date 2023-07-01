@@ -1,0 +1,8 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://anshg2003:Optiplex2160@cluster0.7y92qnp.mongodb.net/
+      database: microservices
+
+server:
+  port: 8083
