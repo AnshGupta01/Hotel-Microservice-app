@@ -67,6 +67,8 @@ public class UserServiceImpl implements UserService {
             //api call to hotel service to get the hotel
 //            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hotels/"
 //                    +rating.getHotelId(), Hotel.class);
+
+            //fiegn client used
             Hotel hotel = hotelService.getHotel(rating.getHotelId());
 //            logger.info("response status code",forEntity.getStatusCode());
 

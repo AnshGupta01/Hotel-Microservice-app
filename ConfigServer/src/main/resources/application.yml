@@ -4,3 +4,10 @@ server:
 spring:
   application:
     name: CONFIG-SERVER
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/AnshGupta01/Hotel-microservice-config
+          clone-on-start: true
