@@ -4,6 +4,7 @@ import com.ansh.user.service.entities.Hotel;
 import com.ansh.user.service.entities.Ratings;
 import com.ansh.user.service.entities.User;
 import com.ansh.user.service.exceptions.ResourceNotFoundException;
+import com.ansh.user.service.external.services.HotelService;
 import com.ansh.user.service.repositories.UserRepo;
 import com.ansh.user.service.services.UserService;
 import org.slf4j.Logger;
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private HotelService hotelService;
     private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
@@ -61,10 +65,10 @@ public class UserServiceImpl implements UserService {
         List<Ratings> ratingList = ratings.stream().map(rating -> {
 
             //api call to hotel service to get the hotel
-            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hotels/"
-                    +rating.getHotelId(), Hotel.class);
-            Hotel hotel = forEntity.getBody();
-            logger.info("response status code",forEntity.getStatusCode());
+//            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://HOTEL-SERVICE/hotels/"
+//                    +rating.getHotelId(), Hotel.class);
+            Hotel hotel = hotelService.getHotel(rating.getHotelId());
+//            logger.info("response status code",forEntity.getStatusCode());
 
             //set the hotel to rating
             rating.setHotel(hotel);
