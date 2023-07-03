@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: USER-SERVICE
+
   datasource:
     url: jdbc:mysql://localhost:3306/microservices
     username: root
@@ -14,5 +15,38 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
   config:
-    import: configserver:http://localhost:8085
+    import: optional:configserver:http://localhost:8085
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      RATING_HOTEL_BREAKER:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 6s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  retry:
+    instances:
+      RATING_HOTEL_SERVICE:
+        max-attempts: 3
+        wait-duration: 2s
+
