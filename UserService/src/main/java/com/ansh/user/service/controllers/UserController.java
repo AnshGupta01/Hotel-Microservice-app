@@ -2,8 +2,7 @@ package com.ansh.user.service.controllers;
 
 import com.ansh.user.service.entities.User;
 import com.ansh.user.service.services.UserService;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,9 @@ public class UserController {
     int retryCount=1;
     //single user get
     @GetMapping("/{userId}") // will get user by userId
-    @CircuitBreaker(name = "RATING_HOTEL_BREAKER", fallbackMethod = "ratingHotelFallback")
-    @Retry(name = "RATING_HOTEL_SERVICE", fallbackMethod = "ratingHotelFallback")
+//    @CircuitBreaker(name = "RATING_HOTEL_BREAKER", fallbackMethod = "ratingHotelFallback")
+//    @Retry(name = "RATING_HOTEL_SERVICE", fallbackMethod = "ratingHotelFallback")
+    @RateLimiter(name = "USER_RATE_LIMITER", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<User> getSingleUser(@PathVariable(value = "userId") String userId){
         logger.info("retry Count: {}", retryCount);
         retryCount++;
