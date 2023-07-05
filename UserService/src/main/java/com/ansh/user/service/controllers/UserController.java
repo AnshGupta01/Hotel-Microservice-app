@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,15 +29,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user1);
     }
 
-    int retryCount=1;
     //single user get
     @GetMapping("/{userId}") // will get user by userId
 //    @CircuitBreaker(name = "RATING_HOTEL_BREAKER", fallbackMethod = "ratingHotelFallback")
 //    @Retry(name = "RATING_HOTEL_SERVICE", fallbackMethod = "ratingHotelFallback")
     @RateLimiter(name = "USER_RATE_LIMITER", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<User> getSingleUser(@PathVariable(value = "userId") String userId){
-        logger.info("retry Count: {}", retryCount);
-        retryCount++;
+//        logger.info("retry Count: {}", retryCount);
         logger.info("Get Single User Handler: USer Controller");
         User user = userService.getUser(userId);
         return ResponseEntity.ok(user);
@@ -46,6 +45,7 @@ public class UserController {
     //return type of fallback method is always from main method/api return method (Parameters also should match)
     public ResponseEntity<User> ratingHotelFallback(String userId, Exception ex){
         logger.info("Fallback is executed because service is down", ex.getMessage());
+        ex.printStackTrace();
 
         User dummy = User.builder()
                 .email("Dummy@gmail.com")

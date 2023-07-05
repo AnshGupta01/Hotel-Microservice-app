@@ -10,3 +10,8 @@ spring:
 
 server:
   port: 8083
+
+okta:
+  oauth2:
+    issuer: https://dev-55888553.okta.com/oauth2/default
+    audience: api://default

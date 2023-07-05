@@ -5,6 +5,7 @@ import com.ansh.rating.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +18,16 @@ public class RatingController {
     private RatingService ratingService;
 
     //create rating
+    @PreAuthorize("hasAuthority('Admin')")
+
     @PostMapping
     public ResponseEntity<Rating> create(@RequestBody Rating rating){
         return ResponseEntity.status(HttpStatus.CREATED).body(ratingService.create(rating));
     }
 
     //get all ratings
+    @PreAuthorize("hasAuthority('SCOPE_internal')")
+
     @GetMapping
     public ResponseEntity<List<Rating>> getRatings(){
         return ResponseEntity.ok(ratingService.getRatings());
