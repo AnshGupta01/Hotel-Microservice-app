@@ -1,3 +1,5 @@
+An API created with Spring-Boot in which I split up a big project into 6 different services that work in sync with each other. This has been implemented using Eureka Server-Client model. This has been possible due to Spring-Microservice-Architecture
+
 # Project Implementations:
 * API gateway
 * Eureka server and client
